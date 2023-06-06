@@ -15,7 +15,7 @@ export class BlogService {
       return res.status(404).send();
     }
     const blog = await blogRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
-    if(!blog) {return res.status(200).send();
+    if(!blog) {return res.status(404).send();
     }
     res.status(200).send(blog);
   }
@@ -49,10 +49,6 @@ export class BlogService {
     if(!req.params.id){
       return res.status(404).send();
     }
-    // const isBlog = await blogRepository.findOne({ id: req.params.id});
-    // if(!isBlog){
-    //   return res.status(404).send();
-    // }
     const deleted = await blogRepository.deleteOne({ id: req.params.id });
     if (deleted.deletedCount === 0) {
       return res.status(404).send('Not Found');

@@ -59,7 +59,7 @@ export class PostService {
     }
     const deleted = await postRepository.deleteOne({id: req.params.id});
     if (deleted.deletedCount === 0) {
-      return  res.status(404).send('Not Found');
+      return res.status(404).send('Not Found');
     }
     res.status(204).send()
   }
