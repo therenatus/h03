@@ -15,8 +15,7 @@ export class BlogService {
       return res.status(200).send();
     }
     const blog = await blogRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
-    if(!blog) {
-      return res.status(404).send('Not Found');
+    if(!blog) {return res.status(200).send();
     }
     res.status(200).send(blog);
   }
@@ -48,6 +47,6 @@ export class BlogService {
       return res.status(204).send();
     }
     await blogRepository.deleteOne({ id: req.params.id });
-   res.send(204).send()
+   res.status(204).send()
   }
 }

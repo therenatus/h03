@@ -11,6 +11,9 @@ export class PostService {
   }
 
   async getOne(req: Request, res: Response) {
+    if(!req.params.id){
+      return res.status(200).send();
+    }
     const post = await postRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
     if(!post) {
       return res.status(404).send('Not Found');
