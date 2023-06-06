@@ -11,7 +11,7 @@ export class PostService {
   }
 
   async getOne(req: Request, res: Response) {
-    const post = await postRepository.findOne({ id: req.params.id});
+    const post = await postRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
     if(!post) {
       return res.status(404).send('Not Found');
     }
@@ -20,7 +20,7 @@ export class PostService {
 
   async create (req: Request, res: Response): Promise<Response<IPost>> {
     const postBody = req.body;
-    const blog = await blogRepository.findOne({id: req.body.blogId});
+    const blog = await blogRepository.findOne({id: req.body.blogId}, {projection: { _id: 0}});
     if(!blog){
       return res.status(404).send()
     }
@@ -30,7 +30,7 @@ export class PostService {
     }
     postBody.blogName = blog?.name;
     const post = await postRepository.insertOne(postBody);
-    const posted = await postRepository.findOne({_id: post.insertedId})
+    const posted = await postRepository.findOne({_id: post.insertedId}, {projection: { _id: 0}})
     return res.status(201).send(posted);
   }
 
