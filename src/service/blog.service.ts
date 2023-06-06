@@ -46,7 +46,10 @@ export class BlogService {
     if(!isBlog){
       return res.status(404).send();
     }
-    await blogRepository.deleteOne({ id: req.params.id });
+    const deleted = await blogRepository.deleteOne({ id: req.params.id });
+    if (deleted.deletedCount === 0) {
+      return  res.status(404).send('Not Found');
+    }
    res.status(204).send()
   }
 }
