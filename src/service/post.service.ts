@@ -46,7 +46,7 @@ export class PostService {
     if(!isBlog){
       return res.status(204).send();
     }
-    await postRepository.updateOne({ id: req.params.id}, req.body);
+    await postRepository.updateOne({ id: req.params.id}, {$set: req.body});
     res.status(204).send();
   }
 
