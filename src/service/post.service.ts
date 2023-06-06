@@ -42,9 +42,9 @@ export class PostService {
   }
 
   async update(req: Request, res: Response){
-    const isBlog = await blogRepository.findOne({ id: req.params.id});
-    if(!isBlog){
-      return res.status(204).send();
+    const isPost = await postRepository.findOne({ id: req.params.id});
+    if(!isPost){
+      return res.status(404).send();
     }
     await postRepository.updateOne({ id: req.params.id}, {$set: req.body});
     res.status(204).send();

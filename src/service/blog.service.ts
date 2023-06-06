@@ -35,7 +35,7 @@ export class BlogService {
     const isBlog = await blogRepository.findOne({ id: req.params.id});
     console.log(isBlog)
     if(!isBlog){
-      return res.status(204).send();
+      return res.status(404).send();
     }
     await blogRepository.updateOne({ id: req.params.id}, {$set: req.body});
 
