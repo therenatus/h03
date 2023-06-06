@@ -44,7 +44,7 @@ export class BlogService {
   async delete (req: Request, res: Response) {
     const isBlog = await blogRepository.findOne({ id: req.params.id});
     if(!isBlog){
-      return res.status(204).send();
+      return res.status(404).send();
     }
     await blogRepository.deleteOne({ id: req.params.id });
    res.status(204).send()

@@ -38,14 +38,15 @@ export class PostService {
     const post = await postRepository.insertOne(postBody);
     const posted = await postRepository.findOne({_id: post.insertedId}, {projection: { _id: 0}})
     console.log(posted)
-    return res.status(200).send(posted);
+    return res.status(201).send(posted);
   }
 
   async update(req: Request, res: Response){
-    const post = await postRepository.updateOne({ id: req.params.id}, req.body);
-    if(post.matchedCount === 0){
-      return res.status(404).send('Not Found');
+    const isBlog = await blogRepository.findOne({ id: req.params.id});
+    if(!isBlog){
+      return res.status(204).send();
     }
+    await postRepository.updateOne({ id: req.params.id}, req.body);
     res.status(204).send();
   }
 
