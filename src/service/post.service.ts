@@ -6,7 +6,7 @@ import {ObjectId} from "mongodb";
 export class PostService {
 
   async getAll(req: Request, res: Response) {
-    const [post] = await Promise.all([postRepository.find().toArray()]);
+    const [post] = await Promise.all([postRepository.find().project({_id: 0}).toArray()]);
     res.status(200).send(post)
   }
 
@@ -27,14 +27,15 @@ export class PostService {
     }
     const unique = await postRepository.findOne({ blogId: blog.id});
     if(unique) {
-      return res.status(401).send()
+      return res.status(400).send()
     }
     postBody.blogName = blog?.name;
     postBody.createdAt = date;
-    body.id = (+date).toString();
+    postBody.id = (+date).toString();
     const post = await postRepository.insertOne(postBody);
     const posted = await postRepository.findOne({_id: post.insertedId}, {projection: { _id: 0}})
-    return res.status(201).send(posted);
+    console.log(posted)
+    return res.status(200).send(posted);
   }
 
   async update(req: Request, res: Response){
