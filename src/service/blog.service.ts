@@ -33,6 +33,10 @@ export class BlogService {
   }
 
   async update(req: Request, res: Response){
+    const isBlog = await blogRepository.findOne({ id: req.params.id});
+    if(!isBlog){
+      return res.status(404).send('Not Found');
+    }
     const blog = await blogRepository.updateOne({ id: req.params.id}, req.body);
     if(blog.matchedCount === 0){
       return res.status(404).send('Not Found');
@@ -41,6 +45,10 @@ export class BlogService {
   }
 
   async delete (req: Request, res: Response) {
+    const isBlog = await blogRepository.findOne({ id: req.params.id});
+    if(!isBlog){
+      return res.status(200).send();
+    }
     const deleted = await blogRepository.deleteOne({ id: req.params.id });
     if (!deleted.deletedCount) {
       return  res.status(404).send('Not Found');

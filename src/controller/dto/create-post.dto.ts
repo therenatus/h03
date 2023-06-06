@@ -8,8 +8,7 @@ export const CreatePostDto = () => {
     body('shortDescription').trim().isLength({min: 1, max: 100}),
     body('content').trim().isLength({min: 1, max: 1000}),
     body('blogId').trim().isString().custom(async(blogId) => {
-      const blog = await blogRepository.findOne({_id: new ObjectId(blogId)});
-      console.log(blog)
+      const blog = await blogRepository.findOne({id: blogId});
       if(!blog) {
         throw new Error('BlogID not found');
       }
