@@ -12,7 +12,7 @@ export class BlogService {
 
   async getOne(req: Request, res: Response) {
     if(!req.params.id){
-      return res.status(200).send();
+      return res.status(404).send();
     }
     const blog = await blogRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
     if(!blog) {return res.status(200).send();
