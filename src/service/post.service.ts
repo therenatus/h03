@@ -12,7 +12,7 @@ export class PostService {
 
   async getOne(req: Request, res: Response) {
     if(!req.params.id){
-      return res.status(200).send();
+      return res.status(404).send();
     }
     const post = await postRepository.findOne({ id: req.params.id}, {projection: { _id: 0}});
     if(!post) {
@@ -42,6 +42,9 @@ export class PostService {
   }
 
   async update(req: Request, res: Response){
+    if(!req.params.id){
+      return res.status(404).send();
+    }
     const isPost = await postRepository.findOne({ id: req.params.id});
     if(!isPost){
       return res.status(404).send();
@@ -51,6 +54,9 @@ export class PostService {
   }
 
   async delete (req: Request, res: Response) {
+    if(!req.params.id){
+      return res.status(404).send();
+    }
     const deleted = await postRepository.deleteOne({id: req.params.id});
     if (deleted.deletedCount === 0) {
       return  res.status(404).send('Not Found');
