@@ -20,6 +20,7 @@ export class PostService {
 
   async create (req: Request, res: Response): Promise<Response<IPost>> {
     const postBody = req.body;
+    const date = new Date();
     const blog = await blogRepository.findOne({id: req.body.blogId}, {projection: { _id: 0}});
     if(!blog){
       return res.status(404).send()
@@ -29,6 +30,8 @@ export class PostService {
       return res.status(401).send()
     }
     postBody.blogName = blog?.name;
+    postBody.createdAt = date;
+    body.id = (+date).toString();
     const post = await postRepository.insertOne(postBody);
     const posted = await postRepository.findOne({_id: post.insertedId}, {projection: { _id: 0}})
     return res.status(201).send(posted);

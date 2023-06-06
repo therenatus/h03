@@ -25,8 +25,8 @@ export class BlogService {
     const date = new Date();
     const body = req.body;
     body.createdAt = date;
+    body.id = (+date).toString();
     body.isMembership = false;
-    body.id = (+date).toString()
     const insertBlog = await blogRepository.insertOne(req.body);
     const blog = await blogRepository.findOne({_id: insertBlog.insertedId}, {projection: { _id: 0}});
     res.status(201).send(blog);
@@ -35,24 +35,19 @@ export class BlogService {
   async update(req: Request, res: Response){
     const isBlog = await blogRepository.findOne({ id: req.params.id});
     if(!isBlog){
-      return res.status(404).send('Not Found');
+      return res.status(204).send();
     }
-    const blog = await blogRepository.updateOne({ id: req.params.id}, req.body);
-    if(blog.matchedCount === 0){
-      return res.status(404).send('Not Found');
-    }
+    await blogRepository.updateOne({ id: req.params.id}, req.body);
+
     res.status(204).send();
   }
 
   async delete (req: Request, res: Response) {
     const isBlog = await blogRepository.findOne({ id: req.params.id});
     if(!isBlog){
-      return res.status(200).send();
+      return res.status(204).send();
     }
-    const deleted = await blogRepository.deleteOne({ id: req.params.id });
-    if (!deleted.deletedCount) {
-      return  res.status(404).send('Not Found');
-    }
+    await blogRepository.deleteOne({ id: req.params.id });
    res.send(204).send()
   }
 }
